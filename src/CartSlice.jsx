@@ -14,18 +14,18 @@ export const CartSlice = createSlice({
       existingItem.quantity++;
     }
     else {
-      state.items.push({name,image,cost,quantity:1});
+      const numericCost = parseFloat(cost.replace('$', ''));
+      state.items.push({name,image,cost:numericCost,quantity:1});
     }
     },
     removeItem: (state, action) => {
       state.items=state.items.filter(item=>item.name!==action.payload);
     },
     updateQuantity: (state, action) => {
-      const {name,quantity} =action.payload;
-      const itemToUpdate = state.items.find(item=>item.name===name);
-      if (itemToUpdate){
-        item.quantity=quantity;
-      }    
+      const { name, quantity } = action.payload;
+      state.items = state.items.map(item =>
+        item.name === name ? { ...item, quantity } : item // ✅ Immutable update
+      );
     },
   },
 });
